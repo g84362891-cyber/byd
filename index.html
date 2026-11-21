@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="uz" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYD Uzbekistan — Kelajak Texnologiyalari</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #07090e;
+            color: #f8fafc;
+        }
+
+        .glass-nav {
+            background: rgba(7, 9, 14, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .car-card {
+            background: linear-gradient(145deg, rgba(22, 28, 42, 0.7) 0%, rgba(12, 16, 26, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .car-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 20px 40px -15px rgba(14, 165, 233, 0.25);
+        }
+
+        .car-card:hover .car-img {
+            transform: scale(1.07);
+        }
+
+        .car-img {
+            transition: transform 0.6s ease;
+        }
+
+        .btn-glow {
+            background: linear-gradient(90deg, #0284c7, #38bdf8);
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow:hover {
+            box-shadow: 0 0 25px rgba(56, 189, 248, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at 70% 30%, rgba(14, 165, 233, 0.18) 0%, rgba(7, 9, 14, 0) 60%);
+        }
+
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #07090e;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38bdf8;
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-sky-500 selection:text-white">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-3"></div>
+
+    <!-- Navbar -->
+    <header class="glass-nav fixed top-0 left-0 right-0 z-40 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div
+                        class="w-11 h-11 rounded-xl bg-gradient-to-br from-sky-500 to-blue-700 flex items-center justify-center font-extrabold text-xl tracking-wider text-white shadow-lg group-hover:shadow-sky-500/40 transition-all">
+                        BYD
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-widest text-white block leading-none">BYD</span>
+                        <span class="text-[10px] tracking-[0.25em] text-sky-400 uppercase font-semibold">Build Your
+                            Dreams</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-sm font-medium text-slate-300 hover:text-sky-400 transition-colors">Bosh
+                        sahifa</a>
+                    <a href="#models"
+                        class="text-sm font-medium text-slate-300 hover:text-sky-400 transition-colors">Avtomobillar</a>
+                    <a href="#tech"
+                        class="text-sm font-medium text-slate-300 hover:text-sky-400 transition-colors">Texnologiyalar</a>
+                    <a href="#about"
+                        class="text-sm font-medium text-slate-300 hover:text-sky-400 transition-colors">Ma'lumotlar</a>
+                </nav>
+
+                <!-- Action Buttons -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button onclick="openModal('testDriveModal')"
+                        class="text-sm font-semibold text-slate-300 hover:text-white px-4 py-2 rounded-lg border border-slate-700 hover:border-sky-500 transition-all">
+                        Test-Drayv
+                    </button>
+                    <button onclick="openModal('registerModal')"
+                        class="btn-glow text-sm font-semibold text-white px-5 py-2.5 rounded-lg flex items-center gap-2">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Ro'yxatdan o'tish</span>
+                    </button>
+                </div>
+
+                <!-- Mobile Hamburger Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn"
+                        class="text-slate-300 hover:text-white p-2 rounded-lg focus:outline-none">
+                        <i class="fa-solid fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-[#0b0f19] border-b border-slate-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#home"
+                class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Bosh
+                sahifa</a>
+            <a href="#models"
+                class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Avtomobillar</a>
+            <a href="#tech"
+                class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Texnologiyalar</a>
+            <a href="#about"
+                class="mobile-link block px-3 py-2.5 rounded-lg text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800/60">Ma'lumotlar</a>
+            <div class="pt-3 border-t border-slate-800 flex flex-col gap-3">
+                <button onclick="openModal('testDriveModal')"
+                    class="w-full py-2.5 rounded-lg border border-slate-700 text-center font-semibold text-slate-200 hover:border-sky-500">
+                    Test-Drayvga yozilish
+                </button>
+                <button onclick="openModal('registerModal')"
+                    class="w-full btn-glow py-2.5 rounded-lg text-center font-semibold text-white">
+                    Ro'yxatdan o'tish
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative pt-32 pb-20 lg:pt-44 lg:pb-32 overflow-hidden hero-gradient">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6">
+                    <div
+                        class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-500/10 border border-sky-500/30 text-sky-400 text-xs font-semibold tracking-wide uppercase">
+                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span>
+                        Rasmiy Dilerlik Markazi — O'zbekiston
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
+                        Kelajakni <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-600">BYD</span>
+                        bilan kashf eting
+                    </h1>
+                    <p class="text-slate-400 text-lg sm:text-xl max-w-xl leading-relaxed">
+                        Blade Battery xavfsizligi, DM-i gibrid tejamkorligi va yuqori darajadagi intellektual qulaylik.
+                        Orzuingizdagi elektromobilni bugun tanlang.
+                    </p>
+                    <div class="flex flex-wrap gap-4 pt-2">
+                        <a href="#models"
+                            class="btn-glow px-7 py-3.5 rounded-xl font-bold text-white flex items-center gap-2">
+                            <span>Modellarni ko'rish</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <button onclick="openModal('registerModal')"
+                            class="px-7 py-3.5 rounded-xl font-bold text-slate-200 bg-slate-800/80 hover:bg-slate-800 border border-slate-700 hover:border-sky-500/50 transition-all">
+                            Shaxsiy kabinet
+                        </button>
+                    </div>
+                    <!-- Stats -->
+                    <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-800/80">
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-white">1,200+ km</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-1">Gibrid yurish masofasi</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-sky-400">3.9 sek</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-1">0-100 km/soat tezlanish</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl sm:text-3xl font-extrabold text-white">8 yil</div>
+                            <div class="text-xs sm:text-sm text-slate-400 mt-1">Batareya kafolati</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Image Card -->
+                <div class="relative group">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-sky-500 to-blue-600 rounded-3xl blur opacity-25 group-hover:opacity-50 transition duration-700">
+                    </div>
+                    <div class="relative rounded-3xl overflow-hidden border border-slate-800 bg-slate-900 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1695645017110-16f7b0b12b88?auto=format&fit=crop&w=1200&q=85"
+                            alt="BYD Seal Electric Car"
+                            class="w-full h-[360px] sm:h-[440px] object-cover group-hover:scale-105 transition-transform duration-700">
+                        <div
+                            class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-[#07090e] via-[#07090e]/80 to-transparent p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Flagman
+                                        Sedan</span>
+                                    <h3 class="text-xl font-bold text-white">BYD Seal Performance AWD</h3>
+                                </div>
+                                <span
+                                    class="px-3 py-1 rounded-lg bg-sky-500/20 border border-sky-500/40 text-sky-300 text-sm font-bold">
+                                    530 ot kuchi
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Car Catalog Section -->
+    <section id="models" class="py-20 bg-[#090c13]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <span class="text-sky-400 font-bold text-sm uppercase tracking-widest">Modellar Qatori</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">BYD Avtomobillar Katalogi</h2>
+                    <p class="text-slate-400 mt-2 max-w-2xl">O'zingizga mos bo'lgan to'liq elektr (EV) yoki gibrid
+                        (DM-i) modelni tanlang.</p>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="flex flex-wrap gap-2" id="filter-buttons">
+                    <button data-filter="all"
+                        class="filter-btn active px-4 py-2 rounded-lg text-sm font-semibold bg-sky-500 text-white transition-all">Barchasi
+                        (9)</button>
+                    <button data-filter="EV"
+                        class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Elektromobil
+                        (EV)</button>
+                    <button data-filter="DM-i"
+                        class="filter-btn px-4 py-2 rounded-lg text-sm font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">Gibrid
+                        (DM-i)</button>
+                </div>
+            </div>
+
+            <!-- Cars Grid -->
+            <div id="cars-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cards injected via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology & Specifications Section -->
+    <section id="tech" class="py-20 border-t border-slate-800/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-sky-400 font-bold text-sm uppercase tracking-widest">Innovatsiyalar</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-2">Nima uchun aynan BYD?</h2>
+                <p class="text-slate-400 mt-3">BYD o'zining akkumulyatorlari, elektr dvigatellari va
+                    yarimo'tkazgichlarini mustaqil ishlab chiqaruvchi dunyodagi yagona avtomobil giganti.</p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div
+                    class="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all group">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-battery-full"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">Blade Battery Texnologiyasi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Dunyodagi eng xavfsiz litiy-temir-fosfat (LFP) batareyasi. Mix bilan teshish sinovidan
+                        yong'insiz va tutunsiz o'tgan, 5000+ zaryadlash sikliga chidamli.
+                    </p>
+                </div>
+
+                <div
+                    class="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all group">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">DM-i Super Gibrid Tizimi</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        Asosan elektr quvvatiga tayangan gibrid tizim. 100 km masofaga atigi 3.8 litr yonilg'i sarfi va
+                        bir bak hamda to'liq quvvat bilan 1200 km dan ortiq masofa.
+                    </p>
+                </div>
+
+                <div
+                    class="p-8 rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-sky-500/50 transition-all group">
+                    <div
+                        class="w-14 h-14 rounded-xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 text-2xl mb-6 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">e-Platform 3.0 & DiLink</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        15.6 dyuymli aylanuvchi sensor ekran, ovozli boshqaruv, 360° kamera tizimi va qishki haroratda
+                        ham batareya samaradorligini saqlovchi issiqlik nasosi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Detailed Car Information & Comparison Section (Pastki qism) -->
+    <section id="about" class="py-20 bg-[#090c13] border-t border-slate-800/70">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-12">
+                <span class="text-sky-400 font-bold text-sm uppercase tracking-widest">Texnik Ma'lumotlar</span>
+                <h2 class="text-3xl font-extrabold text-white mt-2">Avtomobillar Bo'yicha Batafsil Ma'lumot</h2>
+                <p class="text-slate-400 mt-2">Barcha modellarning mator quvvati, batareya sig'imi, zaryadlash vaqti va
+                    kafolat shartlari bilan tanishing.</p>
+            </div>
+
+            <!-- Responsive Table -->
+            <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900/50 shadow-xl">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr
+                            class="border-b border-slate-800 bg-slate-900 text-slate-300 text-xs uppercase tracking-wider">
+                            <th class="py-4 px-6 font-bold">Model Nomi</th>
+                            <th class="py-4 px-6 font-bold">Turi</th>
+                            <th class="py-4 px-6 font-bold">Mator Holati / Quvvati</th>
+                            <th class="py-4 px-6 font-bold">Yurish Masofasi</th>
+                            <th class="py-4 px-6 font-bold">0-100 km/s</th>
+                            <th class="py-4 px-6 font-bold">Narxi (Taxminiy)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="specs-table-body" class="divide-y divide-slate-800/70 text-sm text-slate-300">
+                        <!-- Rows injected via JS -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Additional Info Cards -->
+            <div class="grid md:grid-cols-2 gap-8 mt-12">
+                <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex gap-5 items-start">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl shrink-0">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-white">Rasmiy Kafolat va Servis</h4>
+                        <p class="text-slate-400 text-sm mt-1.5 leading-relaxed">
+                            O'zbekistondagi barcha rasmiy BYD dilerlik markazlarida avtomobilga 6 yil yoki 150,000 km,
+                            Blade Battery akkumulyatoriga esa 8 yil kafolat taqdim etiladi.
+                        </p>
+                    </div>
+                </div>
+                <div class="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 flex gap-5 items-start">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl shrink-0">
+                        <i class="fa-solid fa-charging-station"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-white">Tezkor Quvvatlash (DC Fast Charge)</h4>
+                        <p class="text-slate-400 text-sm mt-1.5 leading-relaxed">
+                            Tezkor quvvatlash stansiyalarida avtomobil batareyasini 30% dan 80% gacha atigi 25-30 daqiqa
+                            ichida to'ldirish imkoniyati mavjud.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#05070b] border-t border-slate-800/80 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                <div class="col-span-1 md:col-span-2 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-sky-600 flex items-center justify-center font-extrabold text-lg text-white">
+                            BYD</div>
+                        <span class="text-xl font-bold tracking-widest text-white">BYD UZBEKISTAN</span>
+                    </div>
+                    <p class="text-slate-400 text-sm max-w-md leading-relaxed">
+                        Yangi energiya avtomobillari (NEV) bo'yicha jahon yetakchisi. Ekologik toza, xavfsiz va yuqori
+                        texnologiyali avtomobillar bilan kelajak sari qadam tashlang.
+                    </p>
+                    <div class="flex gap-4 pt-2">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-500 transition-all"><i
+                                class="fa-brands fa-telegram"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-500 transition-all"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-500 transition-all"><i
+                                class="fa-brands fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Tezkor Havolalar</h4>
+                    <ul class="space-y-2.5 text-sm text-slate-400">
+                        <li><a href="#home" class="hover:text-sky-400 transition-colors">Bosh sahifa</a></li>
+                        <li><a href="#models" class="hover:text-sky-400 transition-colors">Modellar katalogi</a></li>
+                        <li><a href="#tech" class="hover:text-sky-400 transition-colors">Blade Battery</a></li>
+                        <li><a href="#about" class="hover:text-sky-400 transition-colors">Texnik jadval</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4">Aloqa Markazi</h4>
+                    <ul class="space-y-3 text-sm text-slate-400">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-phone text-sky-400"></i> +998 (71)
+                            200-88-99</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-location-dot text-sky-400"></i>
+                            Toshkent sh., Sergeli va Yunusobod dilerlik markazlari</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-clock text-sky-400"></i> Har kuni:
+                            09:00 — 20:00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 text-center text-xs text-slate-500">
+                &copy; 2026 BYD Uzbekistan. Barcha huquqlar himoyalangan.
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL 1: Ro'yxatdan o'tish (Registration Modal) -->
+    <div id="registerModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+        <div
+            class="bg-[#0f1420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl transform transition-all">
+            <button onclick="closeModal('registerModal')"
+                class="absolute top-4 right-4 w-9 h-9 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div
+                    class="w-12 h-12 rounded-xl bg-sky-500/20 border border-sky-500/40 text-sky-400 flex items-center justify-center mx-auto mb-3 text-xl">
+                    <i class="fa-solid fa-user-plus"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-white">Ro'yxatdan o'tish</h3>
+                <p class="text-slate-400 text-sm mt-1">BYD shaxsiy kabinetini yarating va maxsus takliflarga ega bo'ling
+                </p>
+            </div>
+            <form id="registerForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">To'liq ismingiz</label>
+                    <input type="text" required placeholder="Masalan: Jasur Karimov"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Telefon
+                        raqamingiz</label>
+                    <input type="tel" required placeholder="+998 90 123 45 67"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Elektron pochta</label>
+                    <input type="email" required placeholder="example@mail.uz"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Parol yarating</label>
+                    <input type="password" required placeholder="••••••••"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <button type="submit" class="w-full btn-glow py-3.5 rounded-xl font-bold text-white mt-2">
+                    Ro'yxatdan o'tish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Sotib olish (Buy / Order Modal) -->
+    <div id="buyModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+        <div class="bg-[#0f1420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="closeModal('buyModal')"
+                class="absolute top-4 right-4 w-9 h-9 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Buyurtma rasmiylashtirish</span>
+                <h3 id="buyCarTitle" class="text-2xl font-bold text-white mt-1">BYD Model</h3>
+                <p id="buyCarPrice" class="text-lg font-extrabold text-sky-400 mt-1">$0</p>
+            </div>
+            <form id="buyForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Ism va Familiya</label>
+                    <input type="text" required placeholder="Ismingizni kiriting"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Telefon raqam</label>
+                    <input type="tel" required placeholder="+998 __ ___ __ __"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">To'lov turi</label>
+                    <select
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                        <option>100% To'lov</option>
+                        <option>Avtokredit (Yillik 16% dan)</option>
+                        <option>Muddatli to'lov (Bo'lib to'lash)</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full btn-glow py-3.5 rounded-xl font-bold text-white mt-2">
+                    Buyurtmani tasdiqlash
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: Test-Drayv -->
+    <div id="testDriveModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+        <div class="bg-[#0f1420] border border-slate-700/80 rounded-2xl max-w-md w-full p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="closeModal('testDriveModal')"
+                class="absolute top-4 right-4 w-9 h-9 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mb-6">
+                <span class="text-xs font-bold uppercase tracking-wider text-sky-400">Bepul Sinov</span>
+                <h3 class="text-2xl font-bold text-white mt-1">Test-Drayvga yozilish</h3>
+                <p class="text-slate-400 text-sm mt-1">Avtomobilni boshqarib ko'ring va uning imkoniyatlariga o'zingiz
+                    baho bering.</p>
+            </div>
+            <form id="testDriveForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Modelni tanlang</label>
+                    <select id="testDriveModelSelect"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                        <!-- Options populated via JS -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Ismingiz</label>
+                    <input type="text" required placeholder="Ismingiz"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1.5">Telefon
+                        raqamingiz</label>
+                    <input type="tel" required placeholder="+998 90 123 45 67"
+                        class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-sky-500">
+                </div>
+                <button type="submit" class="w-full btn-glow py-3.5 rounded-xl font-bold text-white mt-2">
+                    So'rov yuborish
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Batafsil Texnik Ma'lumot -->
+    <div id="detailsModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
+        <div
+            class="bg-[#0f1420] border border-slate-700/80 rounded-2xl max-w-lg w-full overflow-hidden relative shadow-2xl">
+            <button onclick="closeModal('detailsModal')"
+                class="absolute top-4 right-4 z-10 w-9 h-9 rounded-lg bg-slate-900/80 text-slate-300 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <img id="detailImg" src="" alt="BYD Car" class="w-full h-56 object-cover">
+            <div class="p-6 sm:p-8">
+                <div class="flex items-center justify-between mb-2">
+                    <span id="detailType"
+                        class="px-2.5 py-1 rounded-md bg-sky-500/20 text-sky-400 text-xs font-bold">EV</span>
+                    <span id="detailPrice" class="text-xl font-extrabold text-white">$0</span>
+                </div>
+                <h3 id="detailTitle" class="text-2xl font-bold text-white mb-3">BYD Model</h3>
+                <p id="detailDesc" class="text-slate-400 text-sm leading-relaxed mb-6"></p>
+
+                <div class="grid grid-cols-2 gap-3 mb-6 text-sm">
+                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                        <span class="text-slate-500 block text-xs">Mator holati</span>
+                        <span id="detailMotor" class="font-bold text-slate-200"></span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                        <span class="text-slate-500 block text-xs">Yurish masofasi</span>
+                        <span id="detailRange" class="font-bold text-slate-200"></span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                        <span class="text-slate-500 block text-xs">0-100 km/s</span>
+                        <span id="detailAccel" class="font-bold text-slate-200"></span>
+                    </div>
+                    <div class="p-3 rounded-xl bg-slate-900 border border-slate-800">
+                        <span class="text-slate-500 block text-xs">Batareya turi</span>
+                        <span class="font-bold text-sky-400">BYD Blade Battery</span>
+                    </div>
+                </div>
+
+                <button id="detailBuyBtn" class="w-full btn-glow py-3.5 rounded-xl font-bold text-white">
+                    Hozir sotib olish
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 9 ta BYD avtomobili ma'lumotlari (Faqat BYD rasmlari va haqiqiy texnik ko'rsatkichlari)
+        const carsData = [
+            {
+                id: 1,
+                name: "BYD Han EV",
+                type: "EV",
+                priceUsd: "$44,500",
+                priceUzs: "565,000,000 so'm",
+                motor: "380 kVt (517 o.k.) | To'liq privod (AWD)",
+                range: "610 km (CLTC)",
+                accel: "3.9 sek",
+                image: "https://images.unsplash.com/photo-1695645017110-16f7b0b12b88?auto=format&fit=crop&w=900&q=80",
+                desc: "BYD Han EV — biznes klassdagi flagman elektr sedan. Yuqori dinamika, Nappa charm salon va Dynaudio akustika tizimi bilan jihozlangan."
+            },
+            {
+                id: 2,
+                name: "BYD Song Plus DM-i",
+                type: "DM-i",
+                priceUsd: "$31,200",
+                priceUzs: "396,000,000 so'm",
+                motor: "1.5L Turbo + Elektr (145 kVt / 197 o.k.)",
+                range: "1,150 km (Gibrid)",
+                accel: "7.9 sek",
+                image: "https://images.unsplash.com/photo-1716558964076-1abe07448abf?auto=format&fit=crop&w=900&q=80",
+                desc: "O'zbekistondagi eng ommabop krossover. Shahar ichida elektrda, uzoq safarlarda esa o'ta tejamkor gibrid rejimida harakatlanadi."
+            },
+            {
+                id: 3,
+                name: "BYD Seal EV",
+                type: "EV",
+                priceUsd: "$38,900",
+                priceUzs: "494,000,000 so'm",
+                motor: "390 kVt (530 o.k.) | CTB Texnologiyasi",
+                range: "650 km (CLTC)",
+                accel: "3.8 sek",
+                image: "https://images.unsplash.com/photo-1694426085686-3b7e2f4b8c3b?auto=format&fit=crop&w=900&q=80",
+                desc: "Okean estetikasida yaratilgan sport elektrosedani. Cell-to-Body (CTB) texnologiyasi tufayli mukammal muvozanat va boshqaruvga ega."
+            },
+            {
+                id: 4,
+                name: "BYD Tang EV",
+                type: "EV",
+                priceUsd: "$49,800",
+                priceUzs: "632,000,000 so'm",
+                motor: "380 kVt (517 o.k.) | 7 O'rindiqli SUV",
+                range: "635 km (CLTC)",
+                accel: "4.4 sek",
+                image: "https://images.unsplash.com/photo-1695645017110-16f7b0b12b88?auto=format&fit=crop&w=900&q=80",
+                desc: "Katta oilalar uchun mo'ljallangan 7 o'rinlik hashamatli elektr krossover. Brembo tormoz tizimi va DiSus-C aqlli osma tizimi mavjud."
+            },
+            {
+                id: 5,
+                name: "BYD Yuan Plus (Atto 3)",
+                type: "EV",
+                priceUsd: "$26,500",
+                priceUzs: "336,000,000 so'm",
+                motor: "150 kVt (204 o.k.) | Old privod (FWD)",
+                range: "510 km (CLTC)",
+                accel: "7.3 sek",
+                image: "https://images.unsplash.com/photo-1707407786796-2883f258f658?auto=format&fit=crop&w=900&q=80",
+                desc: "e-Platform 3.0 negizida qurilgan zamonaviy shahar krossoveri. Yoshlar va faol hayot tarzi egalari uchun ideal tanlov."
+            },
+            {
+                id: 6,
+                name: "BYD Chazor (Destroyer 05)",
+                type: "DM-i",
+                priceUsd: "$22,800",
+                priceUzs: "289,000,000 so'm",
+                motor: "1.5L + Elektr mator (145 kVt / 197 o.k.)",
+                range: "1,245 km (Gibrid)",
+                accel: "7.3 sek",
+                image: "https://images.unsplash.com/photo-1716558964076-1abe07448abf?auto=format&fit=crop&w=900&q=80",
+                desc: "100 km masofaga atigi 3.8 litr yonilg'i sarflaydigan zamonaviy gibrid sedan. Hamyonbop narx va boy komplektatsiya uyg'unligi."
+            },
+            {
+                id: 7,
+                name: "BYD Dolphin",
+                type: "EV",
+                priceUsd: "$20,400",
+                priceUzs: "259,000,000 so'm",
+                motor: "70 kVt (95 o.k.) | Shahar xetchbeki",
+                range: "420 km (CLTC)",
+                accel: "10.5 sek",
+                image: "https://images.unsplash.com/photo-1707407786796-2883f258f658?auto=format&fit=crop&w=900&q=80",
+                desc: "Ixcham, manevrli va tejamkor elektromobil. Shahar tirbandliklarida harakatlanish va parkovka qilish uchun juda qulay."
+            },
+            {
+                id: 8,
+                name: "BYD Seagull",
+                type: "EV",
+                priceUsd: "$14,900",
+                priceUzs: "189,000,000 so'm",
+                motor: "55 kVt (75 o.k.) | Blade Battery 38.8 kVt/s",
+                range: "405 km (CLTC)",
+                accel: "9.5 sek",
+                image: "https://images.unsplash.com/photo-1694426085686-3b7e2f4b8c3b?auto=format&fit=crop&w=900&q=80",
+                desc: "Eng hamyonbop BYD elektromobili. Kundalik ish va o'qishga qatnash uchun o'ta tejamkor va xavfsiz mini-xetchbek."
+            },
+            {
+                id: 9,
+                name: "BYD Yangwang U8",
+                type: "DM-i",
+                priceUsd: "$155,000",
+                priceUzs: "1,968,000,000 so'm",
+                motor: "880 kVt (1,197 o.k.) | 4 ta mustaqil elektr mator",
+                range: "1,000 km (Gibrid)",
+                accel: "3.6 sek",
+                image: "https://images.unsplash.com/photo-1695645017110-16f7b0b12b88?auto=format&fit=crop&w=900&q=80",
+                desc: "360 daraja joyida aylanish (Tank Turn) va suvda suzish qobiliyatiga ega ultra-lyuks yo'ltanlamas."
+            }
+        ];
+
+        const carsGrid = document.getElementById('cars-grid');
+        const specsTableBody = document.getElementById('specs-table-body');
+        const testDriveModelSelect = document.getElementById('testDriveModelSelect');
+
+        // Render Cars
+        function renderCars(filter = 'all') {
+            carsGrid.innerHTML = '';
+            const filtered = filter === 'all' ? carsData : carsData.filter(c => c.type === filter);
+
+            filtered.forEach(car => {
+                const card = document.createElement('div');
+                card.className = 'car-card rounded-2xl overflow-hidden flex flex-col justify-between group';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-56 overflow-hidden bg-slate-900">
+                            <img src="${car.image}" alt="${car.name}" class="car-img w-full h-full object-cover">
+                            <div class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md ${car.type === 'EV' ? 'bg-sky-500/80 text-white' : 'bg-emerald-500/80 text-white'}">
+                                ${car.type === 'EV' ? '100% Elektr (EV)' : 'Gibrid (DM-i)'}
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start gap-2 mb-2">
+                                <h3 class="text-xl font-bold text-white group-hover:text-sky-400 transition-colors">${car.name}</h3>
+                            </div>
+                            <div class="mb-4">
+                                <span class="text-2xl font-extrabold text-sky-400">${car.priceUsd}</span>
+                                <span class="text-xs text-slate-400 block mt-0.5">${car.priceUzs}</span>
+                            </div>
+                            
+                            <!-- Motor & Specs -->
+                            <div class="space-y-2.5 pt-4 border-t border-slate-800/80 text-sm">
+                                <div class="flex items-center gap-2.5 text-slate-300">
+                                    <i class="fa-solid fa-engine text-sky-400 w-4 text-center"></i>
+                                    <span class="text-xs font-medium">${car.motor}</span>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
+                                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-road text-sky-400"></i> ${car.range}</span>
+                                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-gauge-high text-sky-400"></i> 0-100: ${car.accel}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6 pt-2 flex gap-3">
+                        <button onclick="openBuyModal(${car.id})" class="flex-1 btn-glow py-3 rounded-xl font-bold text-sm text-white flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span>Sotib olish</span>
+                        </button>
+                        <button onclick="openDetailsModal(${car.id})" class="px-4 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-semibold transition-colors" title="Batafsil ma'lumot">
+                            Batafsil
+                        </button>
+                    </div>
+                `;
+                carsGrid.appendChild(card);
+            });
+        }
+
+        // Render Specs Table & Select Options
+        function populateData() {
+            specsTableBody.innerHTML = '';
+            testDriveModelSelect.innerHTML = '';
+
+            carsData.forEach(car => {
+                // Table Row
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-800/40 transition-colors';
+                tr.innerHTML = `
+                    <td class="py-4 px-6 font-bold text-white">${car.name}</td>
+                    <td class="py-4 px-6">
+                        <span class="px-2.5 py-1 rounded text-xs font-semibold ${car.type === 'EV' ? 'bg-sky-500/10 text-sky-400 border border-sky-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'}">
+                            ${car.type}
+                        </span>
+                    </td>
+                    <td class="py-4 px-6 text-slate-300">${car.motor}</td>
+                    <td class="py-4 px-6 text-slate-300">${car.range}</td>
+                    <td class="py-4 px-6 text-sky-400 font-semibold">${car.accel}</td>
+                    <td class="py-4 px-6 font-bold text-white">${car.priceUsd}</td>
+                `;
+                specsTableBody.appendChild(tr);
+
+                // Select option
+                const option = document.createElement('option');
+                option.value = car.name;
+                option.textContent = `${car.name} (${car.type})`;
+                testDriveModelSelect.appendChild(option);
+            });
+        }
+
+        // Filter Logic
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-sky-500', 'text-white');
+                    b.classList.add('bg-slate-800', 'text-slate-300');
+                });
+                btn.classList.remove('bg-slate-800', 'text-slate-300');
+                btn.classList.add('bg-sky-500', 'text-white');
+                renderCars(btn.dataset.filter);
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+        });
+
+        // Modal Controls
+        function openModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            mobileMenu.classList.add('hidden');
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openBuyModal(carId) {
+            const car = carsData.find(c => c.id === carId);
+            if (!car) return;
+            document.getElementById('buyCarTitle').textContent = car.name;
+            document.getElementById('buyCarPrice').textContent = `${car.priceUsd} (${car.priceUzs})`;
+            openModal('buyModal');
+        }
+
+        function openDetailsModal(carId) {
+            const car = carsData.find(c => c.id === carId);
+            if (!car) return;
+            document.getElementById('detailImg').src = car.image;
+            document.getElementById('detailType').textContent = car.type === 'EV' ? '100% Elektromobil' : 'Gibrid (DM-i)';
+            document.getElementById('detailPrice').textContent = car.priceUsd;
+            document.getElementById('detailTitle').textContent = car.name;
+            document.getElementById('detailDesc').textContent = car.desc;
+            document.getElementById('detailMotor').textContent = car.motor;
+            document.getElementById('detailRange').textContent = car.range;
+            document.getElementById('detailAccel').textContent = car.accel;
+
+            document.getElementById('detailBuyBtn').onclick = () => {
+                closeModal('detailsModal');
+                openBuyModal(car.id);
+            };
+            openModal('detailsModal');
+        }
+
+        // Close modal on outside click
+        window.addEventListener('click', (e) => {
+            ['registerModal', 'buyModal', 'testDriveModal', 'detailsModal'].forEach(id => {
+                const modal = document.getElementById(id);
+                if (e.target === modal) closeModal(id);
+            });
+        });
+
+        // Toast Notification System
+        function showToast(title, message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-[#0f172a] border border-sky-500/50 text-white px-5 py-4 rounded-xl shadow-2xl flex items-start gap-3.5 max-w-sm transform transition-all duration-300 translate-y-4 opacity-0';
+            toast.innerHTML = `
+                <div class="w-8 h-8 rounded-lg bg-sky-500/20 text-sky-400 flex items-center justify-center shrink-0 mt-0.5">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <h4 class="font-bold text-sm text-white">${title}</h4>
+                    <p class="text-xs text-slate-300 mt-1">${message}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            });
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Form Submissions
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            closeModal('registerModal');
+            e.target.reset();
+            showToast("Muvaffaqiyatli ro'yxatdan o'tdingiz!", "BYD shaxsiy kabinetingiz faollashtirildi.");
+        });
+
+        document.getElementById('buyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const carName = document.getElementById('buyCarTitle').textContent;
+            closeModal('buyModal');
+            e.target.reset();
+            showToast("Buyurtma qabul qilindi!", `${carName} bo'yicha menejerimiz tez orada bog'lanadi.`);
+        });
+
+        document.getElementById('testDriveForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const model = document.getElementById('testDriveModelSelect').value;
+            closeModal('testDriveModal');
+            e.target.reset();
+            showToast("Test-Drayv band qilindi!", `${model} uchun sinov haydovi so'rovingiz yuborildi.`);
+        });
+
+        // Init
+        renderCars();
+        populateData();
+    </script>
+</body>
+
+</html>
